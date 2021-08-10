@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="fixture.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <title>Document</title>
+</head>
+<body onload="fillDropdown()">
+    <div>
+        <input class="center-block" type="text" id="teamAdder">
+        <button onclick="AddTeam()">Add Team</button>
+    </div>
+
+    <div>
+        <input class="center-block" type="text" id="teamMemberAdder">
+        <select id="teamChooser">
+            <option>Choose a Team</option>
+        </select>
+        <button onclick="AddMember()">Add Member</button>    
+    </div>
+
+    <div>
+        <input class="center-block" type="text" id="teamMemberDeleter">
+        <select id="teamChooserforDeleter">
+            <option>Choose a Team</option>
+        </select>
+        <button onclick="deleteMember()">Delete Member</button>    
+    </div>
+    
+    <div id="teamDisplay">
+        <h1>Team List</h1>
+        <select id="teamChooserList1">
+            <option>Choose a Team</option>
+        </select>
+        <div id="list1">
+            
+        </div>
+
+        <select id="teamChooserList2">
+            <option>Choose a Team</option>
+        </select>
+        <div id="list2">
+            
+        </div>
+    </div>
+
+    <button onclick="displayTeamList()">Display Team</button>
+
+    <h1>Fixtures</h1>
+    <div id="fixtureDisplay">
+        
+    </div>
+    <button onclick="generateFixtures()">Make Fixture</button>
+</body>
+</html>
+
+<style>
+    body{
+        text-align: center;
+    }
+
+    .center-block {
+        display: block;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 50px;
+    }
+
+    select {
+        margin-left: 43%;
+    }
+</style>
