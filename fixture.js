@@ -116,11 +116,19 @@ function fillDropdown(){
     var teamChooserList1 = document.getElementById("teamChooserList1");
     var teamChooserList2 = document.getElementById("teamChooserList2");
     var teamChooserForSub = document.getElementById("teamChooserForSub");
-    var options = []; 
+    var options = [];
+    let optionsForDeleteDropdown = [];
 
     for (var key in localStorage){       
-        if(key != "length" && key != "clear" && key != "getItem" && key != "key" && key != "removeItem" && key != "setItem"){
+        if(key != "length" && key != "clear" && key != "getItem" && key != "key" 
+            && key != "removeItem" && key != "setItem" && !key.includes('_subs')){
             options.push(key);
+            console.log(!key.includes('_subs'))
+            console.log(key)
+        }
+        if(key != "length" && key != "clear" && key != "getItem" && key != "key" 
+            && key != "removeItem" && key != "setItem" ){
+                optionsForDeleteDropdown.push(key);
         }
     }
 
@@ -130,7 +138,6 @@ function fillDropdown(){
         var el = document.createElement("option");
         var el1 = document.createElement("option");
         var el2 = document.createElement("option");
-        var el3 = document.createElement("option");
         var el4 = document.createElement("option");
         el.textContent = opt;
         el.value = opt;
@@ -138,15 +145,21 @@ function fillDropdown(){
         el1.value = opt;
         el2.textContent = opt;
         el2.value = opt;
-        el3.textContent = opt;
-        el3.value = opt;
         el4.textContent = opt;
         el4.value = opt;
         teamChooser.appendChild(el);
         teamChooserList1.appendChild(el1);
         teamChooserList2.appendChild(el2);
-        Choose.appendChild(el3);
         teamChooserForSub.appendChild(el4);
+    }
+
+    for(var i = 0; i < optionsForDeleteDropdown.length; i++) {
+        var optForDeleteDropdown = optionsForDeleteDropdown[i];
+        var el = document.createElement("option");
+        el.textContent = optForDeleteDropdown;
+        el.value = optForDeleteDropdown;
+        
+        Choose.appendChild(el);
     }
 }
 
