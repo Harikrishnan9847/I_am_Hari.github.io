@@ -6,9 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="fixture.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-    <title>Document</title>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <!-- Semantic UI theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+
+    <!-- 
+        RTL version
+    -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.rtl.min.css"/>
+    <!-- Semantic UI theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.rtl.min.css"/>
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
+    <title>Fixture Generator</title>
 </head>
 <body onload="fillDropdown()">
+
     <div>
         <input class="center-block" type="text" id="teamAdder">
         <button onclick="AddTeam()">Add Team</button>
@@ -20,6 +43,14 @@
             <option>Choose a Team</option>
         </select>
         <button onclick="AddMember()">Add Member</button>    
+    </div>
+
+    <div>
+        <input class="center-block" type="text" id="subAdder">
+        <select id="teamChooserForSub">
+            <option>Choose a Team</option>
+        </select>
+        <button onclick="AddSub()">Add Sub</button> 
     </div>
 
     <div>
@@ -72,4 +103,5 @@
     select {
         margin-left: 43%;
     }
+
 </style>

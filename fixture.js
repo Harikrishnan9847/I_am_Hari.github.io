@@ -5,11 +5,11 @@ function AddTeam(){
     if(teamInMemory == null || teamInMemory == undefined){
         let fullTeam = [];
         window.localStorage.setItem(team,JSON.stringify(fullTeam));
-        console.log("Added")
     }
     else{
-        alert(teamInMemory + " Already exists");
+        alertify.success(teamInMemory + " Already exists");
     }
+    document.getElementById('teamAdder').value = '';
     location.reload();
 }
 
@@ -18,23 +18,62 @@ function AddMember(){
     let selectedOption = Choose.value;
     if(selectedOption != "Choose a Team"){
         let teamMember = document.getElementById('teamMemberAdder').value;
-        
-        let teamDetailsInMemory = window.localStorage.getItem(selectedOption);
-        window.localStorage.removeItem(selectedOption);
-
-        let parsedData = JSON.parse(teamDetailsInMemory);
-        if(parsedData.length >= 5){
-            alert("5 members already exist");
+        if(teamMember != null && teamMember != ''){
+            let teamDetailsInMemory = window.localStorage.getItem(selectedOption);
+            let parsedData = JSON.parse(teamDetailsInMemory);
+            if(parsedData.length >= 5){
+                alertify.error('5 members already exist');
+            }
+            else{
+                window.localStorage.removeItem(selectedOption);
+                parsedData.push(teamMember);
+                window.localStorage.setItem(selectedOption,JSON.stringify(parsedData));
+                alertify.success("Added Successfully");      
+            }
         }
         else{
-            parsedData.push(teamMember);
-            window.localStorage.setItem(selectedOption,JSON.stringify(parsedData));
-            alert("Added Successfully")
+            alertify.error("Please enter a name");
         }
     }
     else{
-        alert("Please choose an option");
+        alertify.error("Please choose an option");
     }
+    document.getElementById('teamMemberAdder').value = '';  
+}
+
+function AddSub(){
+    let Choose = document.getElementById("teamChooserForSub"); 
+    let selectedOption = Choose.value;
+    if(selectedOption != "Choose a Team"){
+        let teamMember = document.getElementById('subAdder').value;
+        if(teamMember != null && teamMember != ''){
+            let subsDetailsInMemory = window.localStorage.getItem(selectedOption + '_subs');
+            console.log(subsDetailsInMemory)
+            console.log(selectedOption + '_subs')
+            if(subsDetailsInMemory == null || subsDetailsInMemory == undefined){
+                let fullTeam = [];
+                fullTeam.push(teamMember);
+                window.localStorage.setItem(selectedOption + '_subs', JSON.stringify(fullTeam));
+                alertify.success("Sub Added Successfully");
+            }
+            else{
+                window.localStorage.removeItem(selectedOption + '_subs');
+
+                let parsedData = JSON.parse(subsDetailsInMemory);
+
+                parsedData.push(teamMember);
+                window.localStorage.setItem(selectedOption + '_subs', JSON.stringify(parsedData));
+                alertify.success("Sub Added Successfully");
+            }
+        }
+        else{
+            alertify.error("Please enter a name");
+        }
+    }
+    else{
+        alertify.error("Please choose an option");
+    }
+    document.getElementById('subAdder').value = '';
     
 }
 
@@ -43,27 +82,32 @@ function deleteMember(){
     let selectedOption = Choose.value;
     if(selectedOption != "Choose a Team"){
         let teamMember = document.getElementById('teamMemberDeleter').value;
-        
-        let teamDetailsInMemory = window.localStorage.getItem(selectedOption);
-        window.localStorage.removeItem(selectedOption);
+        if(teamMember != null && teamMember != ''){
+            let teamDetailsInMemory = window.localStorage.getItem(selectedOption);
+            window.localStorage.removeItem(selectedOption);
 
-        let parsedData = JSON.parse(teamDetailsInMemory);
+            let parsedData = JSON.parse(teamDetailsInMemory);
 
-        let index = parsedData.indexOf(teamMember);
+            let index = parsedData.indexOf(teamMember);
 
-        if(index < 0 ){
-            alert("No member found");
+            if(index < 0 ){
+                alertify.error("No member found");
+            }
+            else{
+                parsedData.splice(index,1);
+                window.localStorage.setItem(selectedOption,JSON.stringify(parsedData));
+                alertify.success("Deleted Sucessfully");
+            }
         }
         else{
-            parsedData.splice(index,1);
-            window.localStorage.setItem(selectedOption,JSON.stringify(parsedData));
-            alert("Deleted Sucessfully")
+            alertify.error("Please enter a name");
         }
     }
     else{
-        alert("Please choose an option");
+        alertify.error("Please choose an option");
     }
-      
+    document.getElementById('teamMemberDeleter').value = '';
+    
 }
 
 function fillDropdown(){
@@ -71,6 +115,7 @@ function fillDropdown(){
     let Choose = document.getElementById("teamChooserforDeleter"); 
     var teamChooserList1 = document.getElementById("teamChooserList1");
     var teamChooserList2 = document.getElementById("teamChooserList2");
+    var teamChooserForSub = document.getElementById("teamChooserForSub");
     var options = []; 
 
     for (var key in localStorage){       
@@ -86,6 +131,7 @@ function fillDropdown(){
         var el1 = document.createElement("option");
         var el2 = document.createElement("option");
         var el3 = document.createElement("option");
+        var el4 = document.createElement("option");
         el.textContent = opt;
         el.value = opt;
         el1.textContent = opt;
@@ -94,10 +140,13 @@ function fillDropdown(){
         el2.value = opt;
         el3.textContent = opt;
         el3.value = opt;
+        el4.textContent = opt;
+        el4.value = opt;
         teamChooser.appendChild(el);
         teamChooserList1.appendChild(el1);
         teamChooserList2.appendChild(el2);
         Choose.appendChild(el3);
+        teamChooserForSub.appendChild(el4);
     }
 }
 
@@ -113,15 +162,33 @@ function displayTeamList(){
         let team1DetailsInMemory = window.localStorage.getItem(team1);
         let parsedDataOfTeam1 = JSON.parse(team1DetailsInMemory);
 
+        let team1SubDetailsInMemory = window.localStorage.getItem(team1 + '_subs');
+
         removeAllChildNodes(list1);
         for(let i = 0; i < parsedDataOfTeam1.length; i++) {
-            var element = document.createElement("p");
+            let element = document.createElement("p");
             element.textContent = parsedDataOfTeam1[i];
             list1.appendChild(element);
         }
 
+        if(team1SubDetailsInMemory != null && team1SubDetailsInMemory != undefined){
+            let parsedDataOfTeam1Sub = JSON.parse(team1SubDetailsInMemory);
+            console.log(parsedDataOfTeam1Sub)
+            let element = document.createElement("p");
+            element.innerHTML = '</br>SUBS</br>------</br>';
+            list1.appendChild(element);
+
+            for(let i = 0; i < parsedDataOfTeam1Sub.length; i++) {
+                let element = document.createElement("p");
+                element.textContent = parsedDataOfTeam1Sub[i];
+                list1.appendChild(element);
+            }
+        }
+
         let team2DetailsInMemory = window.localStorage.getItem(team2);
         let parsedDataOfTeam2 = JSON.parse(team2DetailsInMemory);
+        let team2SubDetailsInMemory = window.localStorage.getItem(team2 + '_subs');
+
 
         removeAllChildNodes(list2);
         for(let i = 0; i < parsedDataOfTeam2.length; i++) {
@@ -129,9 +196,24 @@ function displayTeamList(){
             element.textContent = parsedDataOfTeam2[i];
             list2.appendChild(element);
         }
+
+        if(team2SubDetailsInMemory != null && team2SubDetailsInMemory != undefined){
+            let parsedDataOfTeam2Sub = JSON.parse(team2SubDetailsInMemory);
+
+            let element = document.createElement("p");
+            element.innerHTML = '</br>SUBS</br>------</br>';
+            list2.appendChild(element);
+
+            for(let i = 0; i < parsedDataOfTeam2Sub.length; i++) {
+                let element = document.createElement("p");
+                element.textContent = parsedDataOfTeam2Sub[i];
+                list2.appendChild(element);
+            }
+        }
+           
     }
     else{
-        alert("Please choose valid options");
+        alertify.error("Please choose valid option");
     }
 }
 
@@ -148,6 +230,32 @@ function generateFixtures(){
     let team1 = teamChooserList1.value;
     let team2 = teamChooserList2.value;
 
+    let format = `💠 _ECL_ESPORTS_LEAGUE_ 💠</br>
+    </br>
+    ⚜️ {{Team1}} 🆚 {{Team2}} ⚜️</br>
+    </br>
+    </br>
+    🔰 {{Player1(A)}} ⚔️ {{Player1(B)}}</br>
+    🔰 {{Player2(A)}} ⚔️ {{Player2(B)}}</br>
+    🔰 {{Player3(A)}} ⚔️ {{Player3(B)}}</br>
+    🔰 {{Player4(A)}} ⚔️ {{Player4(B)}}</br>
+    🔰 {{Player5(A)}} ⚔️ {{Player5(B)}}</br>
+    </br>
+    </br>
+    ♻️ *Sub* ♻️</br>
+    </br>
+    ✴️ {{Team1}} ✴️</br>
+    </br>
+    {{team1sub}}
+    ✳️ {{Team2}} ✳️</br>
+    </br>
+    {{team2sub}}
+    ✴️Wins({{Team1}})✴️:-</br>
+    </br>
+    ✳️Wins({{Team2}})✳️:-</br>
+    </br>
+    Winning Team🌟:-</br>`;
+
     if(team1 != "Choose a Team" && team2 != "Choose a Team"){
 
 
@@ -160,20 +268,64 @@ function generateFixtures(){
         if(parsedDataOfTeam1.length == parsedDataOfTeam2.length){
             removeAllChildNodes(fixtureDisplay);
             
+            let element = document.createElement("div");
+            let replacedText = format;
+
             for(let i = 0; i < parsedDataOfTeam1.length; i++) {
-                let element = document.createElement("p");
-                element.textContent = parsedDataOfTeam1[i] +  "  X  " + shuffledArray[i];
-                fixtureDisplay.appendChild(element);
+                let variable1 = '{{Player' + parseInt(i+1) + '(A)}}';
+                let variable2 = '{{Player' + parseInt(i+1) + '(B)}}';
+
+                replacedText = replacedText.replace(variable1, parsedDataOfTeam1[i]);
+                replacedText = replacedText.replace(variable2, shuffledArray[i]);
+
             }
+            replacedText = replaceAll(replacedText, '{{Team1}}', team1);
+            replacedText = replaceAll(replacedText, '{{Team2}}', team2);
+
+            let team1SubDetailsInMemory = window.localStorage.getItem(team1 + '_subs');
+
+            if(team1SubDetailsInMemory != null && team1SubDetailsInMemory != undefined){
+                let parsedDataOfTeam1Sub = JSON.parse(team1SubDetailsInMemory);
+                let subFormat = '';
+                for(let i = 0; i < parsedDataOfTeam1Sub.length; i++) {
+                    subFormat = subFormat +  '🔰 '+ parsedDataOfTeam1Sub[i] +'</br>';
+                }
+                replacedText = replacedText.replace('{{team1sub}}', subFormat);
+            }
+            else{
+                replacedText = replacedText.replace('{{team1sub}}', '');
+            }
+    
+            let team2SubDetailsInMemory = window.localStorage.getItem(team2 + '_subs');
+
+            if(team2SubDetailsInMemory != null && team2SubDetailsInMemory != undefined){
+                let parsedDataOfTeam2Sub = JSON.parse(team2SubDetailsInMemory);
+                let subFormat = '';
+                for(let i = 0; i < parsedDataOfTeam2Sub.length; i++) {
+                    subFormat = subFormat +  '🔰 '+ parsedDataOfTeam2Sub[i] +'</br>';
+                }
+                replacedText = replacedText.replace('{{team2sub}}', subFormat);
+            }
+            else{
+                replacedText = replacedText.replace('{{team2sub}}', '');
+            }
+            
+            element.innerHTML = replacedText;
+
+            fixtureDisplay.appendChild(element);
         }
         else{
-            alert("Team member count not matching");
+            alertify.error("Team member count not matching");
         }
     }
     else{
-        alert("Please choose valid options");
+        alertify.error("Please choose valid option");
     }
 }
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+  }
 
 function shuffle(array) {
     var currentIndex = array.length,  randomIndex;
@@ -192,3 +344,6 @@ function shuffle(array) {
   
     return array;
   }
+
+
+  
